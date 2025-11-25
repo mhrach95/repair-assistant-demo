@@ -7,7 +7,11 @@ $(document).ready(function () {
     }
   });
 
-  // Funkce, kterou volá snippet.js
+  $("#btnAddManual").on("click", () => {
+    addCurrentPartToTable();
+  });
+
+  // Funkce pro přidání aktuální součástky do tabulky
   window.addCurrentPartToTable = function () {
     const table = $("#repairTable tbody");
     const row = $("<tr></tr>");
