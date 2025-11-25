@@ -9,15 +9,30 @@
   <h1>Repair Assistant Demo</h1>
 
   <div class="form">
-    <label>Problem Code: <input type="text" id="txtPROBCD3" /></label><br />
-    <label>Location: <input type="text" id="txtLocation" /></label><br />
-    <label>Defect PN: <input type="text" id="txtDefectPN" /></label><br />
-    <label>Replace PN: <input type="text" id="txtReplacePN" /></label><br />
-    <label>Comment: <textarea id="txtREPACOMENT"></textarea></label><br />
+    <label>Problem Code: <input type="text" id="txtPROBCD3" /></label>
+    <label>Location: <input type="text" id="txtLocation" /></label>
+    <label>Defect PN: <input type="text" id="txtDefectPN" /></label>
+    <label>Replace PN: <input type="text" id="txtReplacePN" /></label>
+    <label>Comment: <textarea id="txtREPACOMENT"></textarea></label>
     <button id="btnRunSnippet">Spustit snippet</button>
+    <button id="btnAddRecord">Uložit do tabulky</button>
   </div>
+
+  <table id="repairTable">
+    <thead>
+      <tr>
+        <th>Problem Code</th>
+        <th>Location</th>
+        <th>Defect PN</th>
+        <th>Replace PN</th>
+        <th>Comment</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="snippet.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
