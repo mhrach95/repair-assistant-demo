@@ -8,6 +8,35 @@ window.runRepairSnippet = async function () {
     "6": "F1K06"
   };
 
+  // Přidání checkboxu do stránky (pokud ještě není)
+  if (!document.getElementById("biosCheckbox")) {
+    const box = document.createElement("div");
+    box.style.cssText = `
+      position:fixed; bottom:20px; left:20px;
+      background:#fff; padding:10px; border:1px solid #ccc;
+      font-family:sans-serif; z-index:9999;
+    `;
+    box.innerHTML = `
+      <label><input type="checkbox" id="biosCheckbox"> Přidat "reflashed bios" do komentáře</label>
+    `;
+    document.body.appendChild(box);
+
+    document.getElementById("biosCheckbox").addEventListener("change", (e) => {
+      const commentBox = $("#txtREPACOMENT");
+      let text = commentBox.val();
+      const phrase = "reflashed bios";
+
+      if (e.target.checked) {
+        if (!text.includes(phrase)) {
+          commentBox.val(text.trim() + (text.trim() ? ", " : "") + phrase);
+        }
+      } else {
+        const updated = text.replace(/\s*,?\s*reflashed bios/, "").trim();
+        commentBox.val(updated);
+      }
+    });
+  }
+
   let repeat = true;
 
   while (repeat) {
@@ -15,28 +44,27 @@ window.runRepairSnippet = async function () {
     const finalCode = problemCodes[selected] || selected;
     $("#txtPROBCD").val(finalCode);
 
-    // Simulace volání backendu pro získání popisu problému
+    // Simulace backendového volání pro popis
     const description = await getProblemDescription(finalCode);
     $("#txtREPACOMENT").val(description);
 
     const location = prompt("Zadej lokaci součástky:")?.toUpperCase() || "";
     $("#txtLocation").val(location);
 
-    // Alert po zadání lokace
-    const continueInput = confirm("Chceš zadat další součástku?");
-    repeat = continueInput;
-
     // Automatické vyplnění PN
     $("#txtDefectPN").val("ABC123");
     $("#txtReplacePN").val("ABC123");
 
-    // Přidání do tabulky
-    addToTable();
+    // Zavolání funkce ze stránky pro uložení do tabulky
+    if (typeof window.addCurrentPartToTable === "function") {
+      window.addCurrentPartToTable();
+    }
+
+    // Dotaz na pokračování
+    repeat = confirm("Chceš zadat další součástku?");
   }
 
-  // Simulace backendového volání
   async function getProblemDescription(code) {
-    // Zde by normálně proběhl AJAX request na backend
     const descriptions = {
       "F1A01": "No Power",
       "F1A02": "No Video",
@@ -48,24 +76,5 @@ window.runRepairSnippet = async function () {
     return new Promise(resolve => {
       setTimeout(() => resolve(descriptions[code.toUpperCase()] || "Neznámý problém"), 300);
     });
-  }
-
-  // Přidání do tabulky
-  function addToTable() {
-    const table = $("#repairTable tbody");
-    const row = $("<tr></tr>");
-
-    const fields = [
-      "#txtLocation",
-      "#txtDefectPN",
-      "#txtPROBCD"
-    ];
-
-    fields.forEach(selector => {
-      const cell = $("<td></td>").text($(selector).val());
-      row.append(cell);
-    });
-
-    table.append(row);
   }
 };
