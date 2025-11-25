@@ -1,4 +1,3 @@
-/* Základní stylování stránky */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -6,13 +5,11 @@ body {
   color: #333;
 }
 
-/* Nadpis */
 h1 {
   margin-bottom: 20px;
   color: #2c3e50;
 }
 
-/* Kontejner pro formulář */
 .form {
   background-color: #fff;
   padding: 20px;
@@ -23,7 +20,6 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* Stylování jednotlivých polí */
 label {
   display: block;
   margin-bottom: 10px;
@@ -46,7 +42,6 @@ textarea {
   height: 60px;
 }
 
-/* Tlačítka */
 button {
   padding: 10px 16px;
   margin-top: 10px;
@@ -62,7 +57,6 @@ button:hover {
   background-color: #2980b9;
 }
 
-/* Tabulka s výsledky */
 table {
   width: 100%;
   border-collapse: collapse;
