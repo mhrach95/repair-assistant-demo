@@ -37,30 +37,30 @@ window.runRepairSnippet = async function () {
     });
   }
 
-  const commentMap = {}; // { F1A01: [PU8200, PU8700], F1A02: [PQ3000] }
+  const commentMap = {}; // { "No Power": [PU8200, PU8700], "No Video": [PQ3000] }
   let repeat = true;
 
   while (repeat) {
     const selected = prompt("1 = no power, 2 = no video, 3 = lan fail, 4 = usb c fail, 5 = won't charge, 6 = damage", "1");
-    const finalCode = problemCodes[selected] || selected;
+    const rawCode = problemCodes[selected] || selected;
+    const finalCode = rawCode.toUpperCase();
     $("#txtPROBCD").val(finalCode);
-
-    // Získání popisu z externího JSON souboru
-    const description = await getProblemDescription(finalCode);
 
     const location = prompt("Zadej lokaci součástky:")?.toUpperCase() || "";
     $("#txtLocation").val(location);
 
-    // Uložení lokace do mapy podle problem kódu
-    if (!commentMap[finalCode]) {
-      commentMap[finalCode] = [];
+    const problemName = await getProblemDescription(finalCode);
+
+    // Uložení lokace do mapy podle názvu problému
+    if (!commentMap[problemName]) {
+      commentMap[problemName] = [];
     }
-    commentMap[finalCode].push(location);
+    commentMap[problemName].push(location);
 
     // Vygenerování komentáře
     const commentParts = [];
-    for (const [code, locations] of Object.entries(commentMap)) {
-      commentParts.push(`${code} - changed ${locations.join(", ")}`);
+    for (const [name, locations] of Object.entries(commentMap)) {
+      commentParts.push(`${name} - changed ${locations.join(", ")}`);
     }
     $("#txtREPACOMENT").val(commentParts.join(", "));
 
@@ -82,10 +82,10 @@ window.runRepairSnippet = async function () {
     try {
       const response = await fetch("problems.json");
       const data = await response.json();
-      return data[code.toUpperCase()] || "Neznámý problém";
+      return data[code.toUpperCase()] || code;
     } catch (err) {
       console.error("Chyba při načítání problems.json:", err);
-      return "Neznámý problém";
+      return code;
     }
   }
 };
