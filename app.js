@@ -7,16 +7,15 @@ $(document).ready(function () {
     }
   });
 
-  $("#btnAddRecord").on("click", () => {
+  // Funkce, kterou volá snippet.js
+  window.addCurrentPartToTable = function () {
     const table = $("#repairTable tbody");
     const row = $("<tr></tr>");
 
     const fields = [
-      "#txtPROBCD3",
       "#txtLocation",
       "#txtDefectPN",
-      "#txtReplacePN",
-      "#txtREPACOMENT"
+      "#txtPROBCD"
     ];
 
     fields.forEach(selector => {
@@ -25,8 +24,5 @@ $(document).ready(function () {
     });
 
     table.append(row);
-
-    // Reset polí
-    fields.forEach(selector => $(selector).val(""));
-  });
+  };
 });
