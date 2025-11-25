@@ -9,23 +9,21 @@
   <h1>Repair Assistant Demo</h1>
 
   <div class="form">
-    <label>Problem Code: <input type="text" id="txtPROBCD3" /></label>
+    <label>Problem Code: <input type="text" id="txtPROBCD" /></label>
     <label>Location: <input type="text" id="txtLocation" /></label>
     <label>Defect PN: <input type="text" id="txtDefectPN" /></label>
     <label>Replace PN: <input type="text" id="txtReplacePN" /></label>
     <label>Comment: <textarea id="txtREPACOMENT"></textarea></label>
+    <label><input type="checkbox" id="biosCheckbox" /> Přidat „reflashed bios“ do komentáře</label>
     <button id="btnRunSnippet">Spustit snippet</button>
-    <button id="btnAddRecord">Uložit do tabulky</button>
   </div>
 
   <table id="repairTable">
     <thead>
       <tr>
-        <th>Problem Code</th>
         <th>Location</th>
         <th>Defect PN</th>
-        <th>Replace PN</th>
-        <th>Comment</th>
+        <th>Problem Code</th>
       </tr>
     </thead>
     <tbody></tbody>
