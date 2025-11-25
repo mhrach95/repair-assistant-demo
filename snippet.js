@@ -37,6 +37,7 @@ window.runRepairSnippet = async function () {
     });
   }
 
+  const commentMap = {}; // { F1A01: [PU8200, PU8700], F1A02: [PQ3000] }
   let repeat = true;
 
   while (repeat) {
@@ -44,12 +45,24 @@ window.runRepairSnippet = async function () {
     const finalCode = problemCodes[selected] || selected;
     $("#txtPROBCD").val(finalCode);
 
-    // Simulace backendového volání pro popis
+    // Získání popisu z externího JSON souboru
     const description = await getProblemDescription(finalCode);
-    $("#txtREPACOMENT").val(description);
 
     const location = prompt("Zadej lokaci součástky:")?.toUpperCase() || "";
     $("#txtLocation").val(location);
+
+    // Uložení lokace do mapy podle problem kódu
+    if (!commentMap[finalCode]) {
+      commentMap[finalCode] = [];
+    }
+    commentMap[finalCode].push(location);
+
+    // Vygenerování komentáře
+    const commentParts = [];
+    for (const [code, locations] of Object.entries(commentMap)) {
+      commentParts.push(`${code} - changed ${locations.join(", ")}`);
+    }
+    $("#txtREPACOMENT").val(commentParts.join(", "));
 
     // Automatické vyplnění PN
     $("#txtDefectPN").val("ABC123");
@@ -64,17 +77,15 @@ window.runRepairSnippet = async function () {
     repeat = confirm("Chceš zadat další součástku?");
   }
 
+  // Volání popisu z externího JSON souboru
   async function getProblemDescription(code) {
-    const descriptions = {
-      "F1A01": "No Power",
-      "F1A02": "No Video",
-      "F1D01": "LAN Fail",
-      "F1G11": "USB-C Fail",
-      "F1F04": "Won't Charge",
-      "F1K06": "Physical Damage"
-    };
-    return new Promise(resolve => {
-      setTimeout(() => resolve(descriptions[code.toUpperCase()] || "Neznámý problém"), 300);
-    });
+    try {
+      const response = await fetch("problems.json");
+      const data = await response.json();
+      return data[code.toUpperCase()] || "Neznámý problém";
+    } catch (err) {
+      console.error("Chyba při načítání problems.json:", err);
+      return "Neznámý problém";
+    }
   }
 };
