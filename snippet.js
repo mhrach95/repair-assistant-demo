@@ -17,21 +17,21 @@ window.runRepairSnippet = async function () {
       font-family:sans-serif; z-index:9999;
     `;
     box.innerHTML = `
-      <label><input type="checkbox" id="biosCheckbox"> Přidat "reflashed bios" do komentáře</label>
+      <label><input type="checkbox" id="biosCheckbox"> Přidat "BIOS reflashed" do komentáře</label>
     `;
     document.body.appendChild(box);
 
     document.getElementById("biosCheckbox").addEventListener("change", (e) => {
       const commentBox = $("#txtREPACOMENT");
       let text = commentBox.val();
-      const phrase = "reflashed bios";
+      const phrase = "BIOS reflashed";
 
       if (e.target.checked) {
         if (!text.includes(phrase)) {
           commentBox.val(text.trim() + (text.trim() ? ", " : "") + phrase);
         }
       } else {
-        const updated = text.replace(/\s*,?\s*reflashed bios/, "").trim();
+        const updated = text.replace(/\s*,?\s*BIOS reflashed/, "").trim();
         commentBox.val(updated);
       }
     });
@@ -89,3 +89,4 @@ window.runRepairSnippet = async function () {
     }
   }
 };
+
